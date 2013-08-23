@@ -1,3 +1,9 @@
+import grails.converters.JSON
+
+import org.grails.plugin.kendoui.KendouiConfig
+import org.grails.plugin.kendoui.converter.DomainClassMarshaller
+import org.grails.plugin.kendoui.converter.JavaScriptMapMarshaller
+
 class KendouiGrailsPlugin {
 
     def version = "1.0"
@@ -12,4 +18,16 @@ class KendouiGrailsPlugin {
     def license = "APACHE"
     def issueManagement = [system: "GITHUB", url: "https://github.com/leandrogehlen/grails-kendoui/issues"]
     def scm = [url: "https://github.com/leandrogehlen/grails-kendoui"]
+
+    def doWithApplicationContext = { ctx ->
+
+        JSON.registerObjectMarshaller( new JavaScriptMapMarshaller() )
+
+        if (KendouiConfig.registerMarshaller) {
+            JSON.registerObjectMarshaller( new DomainClassMarshaller(true, application) )
+            JSON.createNamedConfig DomainClassMarshaller.DOMAIN_LOAD, {
+                it.registerObjectMarshaller(new DomainClassMarshaller(true, true, application))
+            }
+        }
+    }
 }
