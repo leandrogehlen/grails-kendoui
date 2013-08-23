@@ -1,13 +1,13 @@
 includeTargets << grailsScript("_GrailsCreateArtifacts")
-includeTargets << new File("${kendouiPluginDir}/scripts/_KendouiGenerate.groovy")
+includeTargets << new File(kendouiPluginDir, "scripts/_KendouiGenerate.groovy")
 
 generateViews = false
 generateController = true
 
-target(main: "Gant script that generates CRUD views for a given domain class") {
-    depends(checkVersion, parseArguments, packageApp)
-    promptForName(type: "Domain Class")
-	
+target(kendouiGenerateController: "Generates CRUD views for a given domain class") {
+	depends(checkVersion, parseArguments, packageApp)
+	promptForName(type: "Domain Class")
+
 	try {
 		def name = argsMap["params"][0]
 		if (!name || name == "*") {
@@ -19,8 +19,8 @@ target(main: "Gant script that generates CRUD views for a given domain class") {
 		}
 	}
 	catch (Exception e) {
-		logError("Error running easyui-generate-view", e)
+		logError("Error running kendoui-generate-controller", e)
 		exit(1)
 	}
 }
-setDefaultTarget("main")
+setDefaultTarget("kendouiGenerateController")

@@ -19,26 +19,26 @@ import org.springframework.util.Assert
 
 class KendouiGrailsTemplateGenerator implements GrailsTemplateGenerator  {
 
-	static final Log LOG = LogFactory.getLog(KendouiGrailsTemplateGenerator)
-		
+	static final Log LOG = LogFactory.getLog(this)
+
 	private helper = new CommandLineHelper()
-	
+
 	String basedir = "."
 	String domainSuffix = 'Instance'
 	boolean overwrite = false
 	def engine = new SimpleTemplateEngine()
-	File kendouiPluginDir	
+	File kendouiPluginDir
 	GrailsPluginManager pluginManager
 	Template renderEditorTemplate
 	ResourceLoader resourceLoader
-	GrailsApplication grailsApplication	
-	
+	GrailsApplication grailsApplication
+
 	KendouiGrailsTemplateGenerator(ClassLoader classLoader) {
 		engine = new SimpleTemplateEngine(classLoader)
 	}
-	
+
 	KendouiGrailsTemplateGenerator() {}
-	
+
 	private canWrite(testFile) {
 		if (!overwrite && testFile.exists()) {
 			try {
@@ -53,7 +53,7 @@ class KendouiGrailsTemplateGenerator implements GrailsTemplateGenerator  {
 		}
 		return true
 	}
-	
+
 	private getTemplateText(String template) {
 		def application = grailsApplication
 		// first check for presence of template in application
@@ -67,33 +67,30 @@ class KendouiGrailsTemplateGenerator implements GrailsTemplateGenerator  {
 		}
 		return templateFile.inputStream.getText()
 	}
-	
+
 	private String getPropertyName(GrailsDomainClass domainClass) {
 		"${domainClass.propertyName}${domainSuffix}"
 	}
 
-	@Override
 	void setResourceLoader(ResourceLoader resourceLoader) {
 		LOG.info "Scaffolding template generator set to use resource loader ${resourceLoader}"
-		this.resourceLoader = resourceLoader		
+		this.resourceLoader = resourceLoader
 	}
 
-	@Override
 	void generateViews(GrailsDomainClass domainClass, String destDir) {
-		 Assert.hasText destDir, "Argument [destdir] not specified"
+		Assert.hasText destDir, "Argument [destdir] not specified"
 
-        def viewsDir = new File("${destDir}/grails-app/views/${domainClass.propertyName}")
-        if (!viewsDir.exists()) {
-            viewsDir.mkdirs()
-        }
+		def viewsDir = new File("${destDir}/grails-app/views/${domainClass.propertyName}")
+		if (!viewsDir.exists()) {
+			viewsDir.mkdirs()
+		}
 
-        for (t in getTemplateNames()) {
-            LOG.info "Generating $t view for domain class [${domainClass.fullName}]"
-            generateView domainClass, t, viewsDir.absolutePath
-        }		
+		for (t in getTemplateNames()) {
+			LOG.info "Generating $t view for domain class [${domainClass.fullName}]"
+			generateView domainClass, t, viewsDir.absolutePath
+		}
 	}
 
-	@Override
 	void generateController(GrailsDomainClass domainClass, String destDir) {
 		Assert.hasText destDir, "Argument [destdir] not specified"
 
@@ -118,8 +115,7 @@ class KendouiGrailsTemplateGenerator implements GrailsTemplateGenerator  {
 			}
 		}
 	}
-	
-	@Override
+
 	void generateController(GrailsDomainClass domainClass, Writer out) {
 		def templateText = getTemplateText("Controller.groovy")
 
@@ -134,25 +130,17 @@ class KendouiGrailsTemplateGenerator implements GrailsTemplateGenerator  {
 
 		def t = engine.createTemplate(templateText)
 		t.make(binding).writeTo(out)
-		
 	}
 
-	@Override
-	void setOverwrite(boolean overwrite) {
-		this.overwrite = overwrite		
-	}
-	
-	@Override
-	public void generateView(GrailsDomainClass domainClass, String viewName, String destDir) {
+	void generateView(GrailsDomainClass domainClass, String viewName, String destDir) {
 		File destFile = new File("$destDir/${viewName}.gsp")
-        if (canWrite(destFile)) {
-            destFile.withWriter { Writer writer ->
-                generateView domainClass, viewName, writer
-            }
-        }	
+		if (canWrite(destFile)) {
+			destFile.withWriter { Writer writer ->
+				generateView domainClass, viewName, writer
+			}
+		}
 	}
-	
-	@Override
+
 	void generateView(GrailsDomainClass domainClass, String viewName, Writer out) {
 		def templateText = getTemplateText("${viewName}.gsp")
 
@@ -164,13 +152,13 @@ class KendouiGrailsTemplateGenerator implements GrailsTemplateGenerator  {
 		def binding = [packageName: packageName,
 				domainClass: domainClass,
 				multiPart: multiPart,
-				className: domainClass.shortName,				
+				className: domainClass.shortName,
 				renderEditor: renderEditor,
 				comparator: hasHibernate ? DomainClassPropertyComparator : SimpleDomainClassPropertyComparator]
 
 		t.make(binding).writeTo(out)
-	}	
-	
+	}
+
 	void setGrailsApplication(GrailsApplication ga) {
 		this.grailsApplication = ga
 		if (ga != null) {
@@ -180,7 +168,7 @@ class KendouiGrailsTemplateGenerator implements GrailsTemplateGenerator  {
 			}
 		}
 	}
-	
+
 	def renderEditor = { property ->
 		def domainClass = property.domainClass
 		def cp
@@ -199,8 +187,8 @@ class KendouiGrailsTemplateGenerator implements GrailsTemplateGenerator  {
 				cp: cp,
 				domainInstance: getPropertyName(domainClass)]
 		return renderEditorTemplate.make(binding).toString()
-	}	
-		
+	}
+
 	def getTemplateNames() {
 		Closure filter = { it[0..-5] }
 		if (resourceLoader && application?.isWarDeployed()) {
@@ -236,7 +224,4 @@ class KendouiGrailsTemplateGenerator implements GrailsTemplateGenerator  {
 		}
 		return resources
 	}
-
-	
-
 }

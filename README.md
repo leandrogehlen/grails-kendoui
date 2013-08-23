@@ -13,36 +13,36 @@ Including the resources
 
 You must use the Grails resources framework to make use of this plugin.
 
-Download http://www.kendoui.com/download.aspx, extracting content in webapp/js/kendoui    
-    
+Download http://www.kendoui.com/download.aspx, extracting content in webapp/js/kendoui
+
 Configuration
 -------------
 The following settings are available
-```groovy 
-// available "en", "pt_BR" 
-grails.plugin.kendoui.culture = 'en' 
+```groovy
+// available "en", "pt_BR"
+grails.plugin.kendoui.culture = 'en'
 
 //folder name found in "kendoui/styles"
-grails.plugin.kendoui.theme = 'Black' 
+grails.plugin.kendoui.theme = 'Black'
 
 //defines whether use source or compressed library (available: 'src', 'mim')
-grails.plugin.kendoui.library.type = 'src' 
+grails.plugin.kendoui.library.type = 'src'
 
 //Auto register marshaller on bootstrap
 grails.plugin.kendoui.register.marshaller = true
 
 //Defines location where was extracted JQuery Kendoui JavaScript library
 grails.plugin.kendoui.location = 'kendoui'
-``` 
+```
 
 TagLibs
 ------
- 
+
 ```xml
 <html>
     <head>
         <title>Hello World Demo</title>
-        <r:require module="kendoui_core"/>      		
+        <r:require module="kendoui_core"/>
         <r:layoutResources />
     </head>
     <body>
@@ -50,7 +50,7 @@ TagLibs
         </k:widgetName>
     </body>
 </html>
-``` 
+```
 
 Scaffold
 --------
@@ -62,4 +62,3 @@ grails kendoui-generate-view [domainClass]
 grails kendoui-generate-all [domainClass]
 grails kendoui-install-templates
 ```
-

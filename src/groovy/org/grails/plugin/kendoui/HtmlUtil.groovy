@@ -7,7 +7,7 @@ import org.apache.commons.lang.StringUtils
 
 class HtmlUtil {
 
-	private static ignoreAttrs = ["prompt", "title", "height", "width"] as Set
+	private static Set ignoreAttrs = ["prompt", "title", "height", "width"]
 
 	private static Set eventsAttrs = [
 		"onblur",
@@ -39,20 +39,20 @@ class HtmlUtil {
 		attrs.collect{k,v->
 			String[] js = ["function", "js:"]
 			boolean nonQuoted = (!(v instanceof String) || v == "true" || v == "false" || StringUtils.startsWithAny(v, js))
-			
+
 			if (v instanceof GString)
 				v = ObjectUtils.toString(v)
-			
+
 			if (v instanceof String && v.startsWith("js:"))
 				v = v.substring(3)
-				
+
 			def value = (nonQuoted) ? v : "'$v'"
 			"$k:$value"
 		}.join(",")
 	}
 
 	static String tagEncode(attrs) {
-		attrs.collect{k,v->						
+		attrs.collect{k,v->
 			"$k=\"${ObjectUtils.toString(v)}\""
 		}.join(" ")
 	}
@@ -61,5 +61,4 @@ class HtmlUtil {
 		def key = attr.toLowerCase()
 		return eventsAttrs.contains(key) || (HTML.getAttributeKey(key) != null && !ignoreAttrs.contains(key))
 	}
-
 }
