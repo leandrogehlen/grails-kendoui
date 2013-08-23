@@ -24,7 +24,7 @@
 
 includeTargets << grailsScript("_GrailsInit")
 
-target('default': "Installs the artifact and scaffolding templates") {
+target(kendouiInstallTemplates: "Installs the artifact and scaffolding templates") {
     depends(checkVersion, parseArguments)
 
     targetDir = "${basedir}/src/templates/kendoui/scaffolding"
@@ -46,5 +46,6 @@ target('default': "Installs the artifact and scaffolding templates") {
         fileset(dir: "${kendouiPluginDir}/src/templates/kendoui/scaffolding")
     }
     event("StatusUpdate", ["Templates installed successfully"])
-
 }
+
+setDefaultTarget("kendouiInstallTemplates")

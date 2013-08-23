@@ -21,13 +21,12 @@ class KendouiConfig {
 	static String getLocation() {
 		getConfig().location ?: 'kendoui'
 	}
-	
+
 	static String getLibraryType() {
 		getConfig().library.type == 'src' ? '' : '.min'
 	}
-	
+
 	static Boolean getRegisterMarshaller() {
 		getConfig().register.marshaller ? getConfig().register.marshaller as Boolean : true
 	}
-
 }

@@ -1,8 +1,8 @@
-<%  
+<%
 	if (property.type == Boolean.class || property.type == boolean.class)
-        out << renderBooleanEditor(domainClass, property)		
-	else if (Number.class.isAssignableFrom(property.type) || (property.type.isPrimitive() && property.type != boolean.class))			
-        out << renderNumberEditor(domainClass, property, false)		
+        out << renderBooleanEditor(domainClass, property)
+	else if (Number.class.isAssignableFrom(property.type) || (property.type.isPrimitive() && property.type != boolean.class))
+        out << renderNumberEditor(domainClass, property, false)
 	else if (Currency.class.isAssignableFrom(property.type))
 		out << renderNumberEditor(domainClass, property, true)
 	else if (property.type == String || property.type == URL.class)
@@ -21,100 +21,100 @@
         out << renderByteArrayEditor(domainClass, property)
     else if (property.type==([] as byte[]).class) //TODO: Bug in groovy means i have to do this :(
         out << renderByteArrayEditor(domainClass, property)
-        
+
 	private renderBooleanEditor(domainClass, property) {
-		def sb = new StringBuilder("")        
+		def sb = new StringBuilder("")
 		sb << "<k:dropDownList name=\"${property.name}\" width=\"60px\">\n\t\t\t\t"
-		sb << "<option value=\"true\"><g:message code=\"default.boolean.true\"/></option>\n\t\t\t\t"  
-		sb << "<option value=\"false\"><g:message code=\"default.boolean.false\"/></option>\n\t\t\t"  
-		sb << "</k:dropDownList>"    
+		sb << "<option value=\"true\"><g:message code=\"default.boolean.true\"/></option>\n\t\t\t\t"
+		sb << "<option value=\"false\"><g:message code=\"default.boolean.false\"/></option>\n\t\t\t"
+		sb << "</k:dropDownList>"
         return sb.toString()
     }
-	
+
 	private renderNumberEditor(domainClass, property, currency) {
 		def decimals = (currency || property.type == Float.class) ?  'decimals="2"' : ""
 		def props = "width=\"100px\" maxlenght=\"8\""
-			
+
         if (!cp) {
             if (property.type == Byte.class)
-                return "<k:numericTextBox name=\"${property.name}\" data-bind=\"value: ${property.name}\" mim=\"-128\" max=\"127\" $props/>"                        
+                return "<k:numericTextBox name=\"${property.name}\" data-bind=\"value: ${property.name}\" mim=\"-128\" max=\"127\" $props/>"
         }
         else {
             if (cp.range) {
-				return "<k:numericTextBox name=\"${property.name}\" data-bind=\"value: ${property.name}\" mim=\"\${${cp.range.from}}\" max=\"\${${cp.range.to}}\" ${decimals} $props/>"                
+				return "<k:numericTextBox name=\"${property.name}\" data-bind=\"value: ${property.name}\" mim=\"\${${cp.range.from}}\" max=\"\${${cp.range.to}}\" ${decimals} $props/>"
             }
             else if (cp.inList) {
 				//todo
-            }                       
-        }		
+            }
+        }
 		return "<k:numericTextBox name=\"${property.name}\" ${decimals} $props/>"
     }
-	
+
     private renderStringEditor(domainClass, property) {
-    	if (!cp) {    	
-            return "<k:input name=\"${property.name}\"/>"            
+    	if (!cp) {
+            return "<k:input name=\"${property.name}\"/>"
         } else {
         	def sb = new StringBuilder("")
             if ("textarea" == cp.widget || (cp.maxSize > 250 && !cp.password && !cp.inList)) {
-                sb << "<textarea name=\"${property.name}\" data-bind=\"value: ${property.name}\" style=\"height:60px;\"" 				
+                sb << "<textarea name=\"${property.name}\" data-bind=\"value: ${property.name}\" style=\"height:60px;\""
 				if (cp.maxSize) sb << " maxlength=\"${cp.maxSize}\" "
 				if (isRequired()) sb << " required=\"\" "
  				sb << "></textarea>"
-				
+
             } else if (cp.inList) {
-				// todo	
+				// todo
 			} else {
-				def type				
+				def type
 				if (cp.password) {
 					type="password"
 				} else if (cp.url) {
 					type="url"
 				} else if (cp.email) {
 					type="email"
-				} 
-				
-				type = (type) ? "validType=\"$type\"" : "" 
-							
-				sb << "<k:textBox name=\"${property.name}\" data-bind=\"value: ${property.name}\" $type"							
+				}
+
+				type = (type) ? "validType=\"$type\"" : ""
+
+				sb << "<k:textBox name=\"${property.name}\" data-bind=\"value: ${property.name}\" $type"
 				if (cp.maxSize) sb << " maxlength=\"${cp.maxSize}\""
-				if (!cp.editable) sb << " readonly=\"readonly\""				
-				if (isRequired()) sb << " required=\"true\""				
+				if (!cp.editable) sb << " readonly=\"readonly\""
+				if (isRequired()) sb << " required=\"true\""
 				sb << "/>"
 			}
 			sb as String
 		}
 	}
-	
+
 	 private renderDateEditor(domainClass, property) {
         def precision = (property.type == Date.class || property.type == java.sql.Date.class || property.type == Calendar.class) ? "day" : "minute";
-		
+
 		if (cp  &&!cp.editable) {
 			return "\${${domainInstance}?.${property.name}?.toString()}"
         }
-				        
-        return precision == 'day' ? "<k:datePicker name=\"${property.name}\" data-bind=\"value: ${property.name}\" width=\"100px\"/>" : 
-        	"<k:dateTimePicker name=\"${property.name}\" data-bind=\"value: ${property.name}\" showSeconds=\"true\" width=\"100px\"/>"        
+
+        return precision == 'day' ? "<k:datePicker name=\"${property.name}\" data-bind=\"value: ${property.name}\" width=\"100px\"/>" :
+        	"<k:dateTimePicker name=\"${property.name}\" data-bind=\"value: ${property.name}\" showSeconds=\"true\" width=\"100px\"/>"
     }
-	
+
 	private renderManyToOne(domainClass,property) {
         if (property.association) {
 			def br = "\n\t\t\t\t"
 			def sb = new StringBuilder("")
-			sb << "<e:combogrid${br}"			
+			sb << "<e:combogrid${br}"
 			sb << "name=\"${property.name}_id\"${br}"
 			sb << "url=\"\${createLink(controller: '${property.name}', action:'list')}\"${br}"
 			sb << "idField=\"id\"${br}"
 			sb << "textField=\"id\"${br}"
 			sb << "fitColumns=\"true\"${br}"
-			sb << "remote=\"true\"${br}"			
-			if (isRequired())  sb << " required=\"true\"${br}"				
+			sb << "remote=\"true\"${br}"
+			if (isRequired())  sb << " required=\"true\"${br}"
 			sb << "columns=\"js:[[${br}\t"
 			sb << "{field:'id', title:'\${g.message(code: '${domainClass.propertyName}.${property.name}.id')}', width:100}${br}"
 			sb << "]]\"/>"
             return sb.toString()
         }
     }
-	
+
 	private renderSelectTypeEditor(type, domainClass,property) {
         if (!cp) {
             return "<g:${type}Select name=\"${property.name}\" value=\"\${${domainInstance}?.${property.name}}\" />"
@@ -129,7 +129,7 @@
             return sb.toString()
         }
     }
-			
+
 	private boolean isRequired() {
 		!isOptional()
 	}
@@ -141,5 +141,5 @@
 	    else {
 	        cp.nullable || (cp.propertyType == String && cp.blank) || cp.propertyType in [boolean, Boolean]
 	    }
-	}        
+	}
 %>
