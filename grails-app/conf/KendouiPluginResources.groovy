@@ -1,6 +1,6 @@
 import org.grails.plugin.kendoui.KendouiConfig
 
-def theme = KendouiConfig.theme
+def theme = KendouiConfig.theme.toLowerCase()
 def culture = KendouiConfig.culture
 def location = KendouiConfig.location
 def suffix = KendouiConfig.libraryType

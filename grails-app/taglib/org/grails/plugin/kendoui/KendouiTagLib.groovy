@@ -21,7 +21,7 @@ class KendouiTagLib {
 		request.setAttribute('resources.need.layout', true)
 
 		def trkName = ResourceTagLib.makePageFragmentKey("script", disposition)
-		grailsResourceProcessor.addDispositionToRequest(request, disposition)
+		grailsResourceProcessor.addDispositionToRequest(request, disposition, "Kendoui JS")
 
 		def trk = request[trkName]
 		if (!trk) {
