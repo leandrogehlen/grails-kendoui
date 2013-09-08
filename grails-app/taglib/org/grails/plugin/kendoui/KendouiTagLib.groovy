@@ -122,7 +122,8 @@ class KendouiTagLib {
 	 * @attr id
 	 */
 	def textBox = {attrs, body ->
-		out << "<input class=\"k-textbox\" ${HtmlUtil.tagEncode(attrs)} />"
+		def cls = attrs.remove("class") ?: ""		
+		out << "<input class=\"k-textbox $cls\" ${HtmlUtil.tagEncode(attrs)} />"
 	}
 
 	/**
