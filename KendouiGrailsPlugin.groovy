@@ -6,8 +6,8 @@ import org.grails.plugin.kendoui.converter.JavaScriptMapMarshaller
 
 class KendouiGrailsPlugin {
 
-    def version = "1.0"
-    def grailsVersion = "2.0 > *"
+    def version = "1.0.1"
+    def grailsVersion = "2.3 > *"
     def title = "Grails Kendoui Plugin"
     def author = "Leandro Guindani Gehlen"
     def authorEmail = "leandrogehlen@gmail.com"
