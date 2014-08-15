@@ -7,15 +7,25 @@ def suffix = KendouiConfig.libraryType
 
 modules = {
 
+    kendoui_min_core {
+        // Common Kendo UI Web CSS
+        resource url: "js/$location/styles/kendo.common${suffix}.css", disposition: 'head'
+        // Default Kendo UI Web theme CSS
+        resource url: "js/$location/styles/kendo.default${suffix}.css", disposition: 'head'
+        // jQuery JavaScript
+        resource url: "js/$location/js/jquery${suffix}.js", disposition: 'head'
+        // Kendo UI Web combined JavaScript
+        resource url: "js/$location/js/kendo.web${suffix}.js", disposition: 'head'
+    }
+
 	kendoui_core {
+        dependsOn("kendoui_min_core")
+
 		resource url: "js/$location/styles/kendo.rtl${suffix}.css", disposition: 'head'
-		resource url: "js/$location/styles/kendo.common${suffix}.css", disposition: 'head'
 		resource url: "js/$location/styles/kendo.${theme}${suffix}.css", disposition: 'head'
 		resource url: [plugin: "kendoui", dir: "css", file: "kendo.messager.css"], disposition: 'head'
 
-		resource url: "js/$location/js/jquery${suffix}.js", disposition: 'head'
 		resource url: "js/$location/js/kendo.core${suffix}.js", disposition: 'head'
-		resource url: "js/$location/js/kendo.web${suffix}.js", disposition: 'head'
 		resource url: "js/$location/js/cultures/kendo.culture.${culture}${suffix}.js", disposition: 'head'
 		resource url: [plugin: "kendoui", dir: "js", file: "kendo.messager.js"], disposition: 'head'
 		resource url: [plugin: "kendoui", dir: "js/cultures", file: "kendo.culture.${culture}.js"], disposition: 'head'
@@ -29,7 +39,53 @@ modules = {
 		resource url: "js/$location/js/kendo.validator${suffix}.js", disposition: 'head'
 	}
 
-	kendoui_framework {
+    kendoui_min_dataviz {
+        // Kendo UI DataViz CSS
+        resource url: "js/$location/styles/kendo.dataviz${suffix}.css", disposition: 'head'
+        // Kendo UI DataViz combined JavaScript
+        resource url: "js/$location/js/kendo.dataviz${suffix}.js", disposition: 'head'
+    }
+
+    kendoui_dataviz {
+        dependsOn("kendoui_min_dataviz")
+
+        resource url: "js/$location/styles/kendo.dataviz.black${suffix}.css", disposition: 'head'
+        resource url: "js/$location/styles/kendo.dataviz.blueopal${suffix}.css", disposition: 'head'
+        resource url: "js/$location/styles/kendo.dataviz.bootstrap${suffix}.css", disposition: 'head'
+        resource url: "js/$location/styles/kendo.dataviz.default${suffix}.css", disposition: 'head'
+        resource url: "js/$location/styles/kendo.dataviz.flat{suffix}.css", disposition: 'head'
+        resource url: "js/$location/styles/kendo.dataviz.highcontrast${suffix}.css", disposition: 'head'
+        resource url: "js/$location/styles/kendo.dataviz.metroblack${suffix}.css", disposition: 'head'
+        resource url: "js/$location/styles/kendo.dataviz.metrot${suffix}.css", disposition: 'head'
+        resource url: "js/$location/styles/kendo.dataviz.moonlight${suffix}.css", disposition: 'head'
+        resource url: "js/$location/styles/kendo.dataviz.silver${suffix}.css", disposition: 'head'
+        resource url: "js/$location/styles/kendo.dataviz.uniform${suffix}.css", disposition: 'head'
+
+
+        resource url: "js/$location/js/kendo.dataviz.barcode${suffix}.js", disposition: 'head'
+        resource url: "js/$location/js/kendo.dataviz.canvas${suffix}.js", disposition: 'head'
+        resource url: "js/$location/js/kendo.dataviz.chart${suffix}.js", disposition: 'head'
+        resource url: "js/$location/js/kendo.dataviz.chart.polar${suffix}.js", disposition: 'head'
+        resource url: "js/$location/js/kendo.dataviz.core${suffix}.js", disposition: 'head'
+        resource url: "js/$location/js/kendo.dataviz.gauge${suffix}.js", disposition: 'head'
+        resource url: "js/$location/js/kendo.dataviz.sparkline${suffix}.js", disposition: 'head'
+        resource url: "js/$location/js/kendo.dataviz.stock${suffix}.js", disposition: 'head'
+        resource url: "js/$location/js/kendo.dataviz.svg${suffix}.js", disposition: 'head'
+        resource url: "js/$location/js/kendo.dataviz.themes${suffix}.js", disposition: 'head'
+        resource url: "js/$location/js/kendo.dataviz.vml${suffix}.js", disposition: 'head'
+    }
+
+    kendoui_scheduler {
+        resource url: "js/$location/js/kendo.scheduler.agendaview${suffix}.js", disposition: 'head'
+        resource url: "js/$location/js/kendo.scheduler${suffix}.js", disposition: 'head'
+        resource url: "js/$location/js/kendo.scheduler.dayview${suffix}.js", disposition: 'head'
+        resource url: "js/$location/js/kendo.scheduler.monthview${suffix}.js", disposition: 'head'
+        resource url: "js/$location/js/kendo.scheduler.recurrence${suffix}.js", disposition: 'head'
+        resource url: "js/$location/js/kendo.scheduler.view${suffix}.js", disposition: 'head'
+    }
+
+
+    kendoui_framework {
 		resource url: "js/$location/js/kendo.editable${suffix}.js", disposition: 'head'
 		resource url: "js/$location/js/kendo.groupable${suffix}.js", disposition: 'head'
 		resource url: "js/$location/js/kendo.reorderable${suffix}.js", disposition: 'head'
@@ -43,7 +99,7 @@ modules = {
 	}
 
 	kendoui_all {
-		dependsOn "kendoui_core, kendoui_data, kendoui_framework"
+		dependsOn "kendoui_core, kendoui_data, kendoui_framework, kendoui_dataviz, kendoui_scheduler"
 		resource url: "js/$location/js/kendo.autocomplete${suffix}.js", disposition: 'head'
 		resource url: "js/$location/js/kendo.calendar${suffix}.js", disposition: 'head'
 		resource url: "js/$location/js/kendo.colorpicker${suffix}.js", disposition: 'head'

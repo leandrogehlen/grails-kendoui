@@ -116,7 +116,12 @@ class KendouiGrailsTemplateGenerator implements GrailsTemplateGenerator  {
 		}
 	}
 
-	void generateController(GrailsDomainClass domainClass, Writer out) {
+    @Override
+    void generateAsyncController(GrailsDomainClass domainClass, String destDir) throws IOException {
+        generateController(domainClass, destDir)
+    }
+
+    void generateController(GrailsDomainClass domainClass, Writer out) {
 		def templateText = getTemplateText("Controller.groovy")
 
 		boolean hasHibernate = pluginManager.hasGrailsPlugin('hibernate')
@@ -132,7 +137,17 @@ class KendouiGrailsTemplateGenerator implements GrailsTemplateGenerator  {
 		t.make(binding).writeTo(out)
 	}
 
-	void generateView(GrailsDomainClass domainClass, String viewName, String destDir) {
+    @Override
+    void generateTest(GrailsDomainClass domainClass, String destDir) throws IOException {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    @Override
+    void generateAsyncTest(GrailsDomainClass domainClass, String destDir) throws IOException {
+        //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+    void generateView(GrailsDomainClass domainClass, String viewName, String destDir) {
 		File destFile = new File("$destDir/${viewName}.gsp")
 		if (canWrite(destFile)) {
 			destFile.withWriter { Writer writer ->
